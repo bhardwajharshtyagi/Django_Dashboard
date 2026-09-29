@@ -1,0 +1,603 @@
+{% extends "base.html" %}
+
+{% block title %}
+My Profile
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-10">
+
+            <div class="card shadow border-0">
+
+
+                <!-- HEADER -->
+
+                <div class="card-header bg-primary text-white">
+
+                    <h4 class="mb-0">
+                        👤 My Profile
+                    </h4>
+
+                </div>
+
+
+                <div class="card-body p-4">
+
+
+                    <!-- SUCCESS / ERROR MESSAGES -->
+
+                    {% if messages %}
+
+                        {% for message in messages %}
+
+                            {% if message.tags == "success" %}
+
+                                <div
+                                    class="alert alert-success alert-dismissible fade show"
+                                    role="alert"
+                                >
+
+                                    {{ message }}
+
+                                    <button
+                                        type="button"
+                                        class="btn-close"
+                                        data-bs-dismiss="alert"
+                                    ></button>
+
+                                </div>
+
+                            {% elif message.tags == "error" %}
+
+                                <div
+                                    class="alert alert-danger alert-dismissible fade show"
+                                    role="alert"
+                                >
+
+                                    {{ message }}
+
+                                    <button
+                                        type="button"
+                                        class="btn-close"
+                                        data-bs-dismiss="alert"
+                                    ></button>
+
+                                </div>
+
+                            {% else %}
+
+                                <div
+                                    class="alert alert-info alert-dismissible fade show"
+                                    role="alert"
+                                >
+
+                                    {{ message }}
+
+                                    <button
+                                        type="button"
+                                        class="btn-close"
+                                        data-bs-dismiss="alert"
+                                    ></button>
+
+                                </div>
+
+                            {% endif %}
+
+                        {% endfor %}
+
+                    {% endif %}
+
+
+                    <!-- PROFILE FORM -->
+
+                    <form
+                        method="POST"
+                        enctype="multipart/form-data"
+                    >
+
+                        {% csrf_token %}
+
+
+                        <div class="row">
+
+
+                            <!-- ================= LEFT SIDE ================= -->
+
+                            <div class="col-md-4 text-center border-end">
+
+
+                                <!-- PROFILE PHOTO CONTAINER -->
+
+                                <div
+                                    style="
+                                        position: relative;
+                                        width: 160px;
+                                        height: 160px;
+                                        margin: 0 auto 15px auto;
+                                    "
+                                >
+
+
+                                    <!-- PROFILE IMAGE -->
+
+                                    {% if profile.profile_image %}
+
+                                        <img
+                                            id="profilePreview"
+                                            src="{{ profile.profile_image.url }}"
+                                            alt="Profile Photo"
+                                            class="rounded-circle"
+                                            style="
+                                                width: 150px;
+                                                height: 150px;
+                                                object-fit: cover;
+                                                border: 4px solid #0d6efd;
+                                            "
+                                        >
+
+                                    {% else %}
+
+                                        <!-- DEFAULT USER INITIAL -->
+
+                                        <div
+                                            id="profilePreview"
+                                            class="
+                                                rounded-circle
+                                                bg-primary
+                                                text-white
+                                                d-flex
+                                                justify-content-center
+                                                align-items-center
+                                            "
+                                            style="
+                                                width: 150px;
+                                                height: 150px;
+                                                font-size: 60px;
+                                                border: 4px solid #0d6efd;
+                                            "
+                                        >
+
+                                            {{ request.user.username|first|upper }}
+
+                                        </div>
+
+                                    {% endif %}
+
+
+                                    <!-- EDIT PENCIL BUTTON -->
+
+                                    <label
+                                        for="profileImageInput"
+                                        class="
+                                            btn
+                                            btn-primary
+                                            rounded-circle
+                                        "
+                                        title="Change Profile Photo"
+                                        style="
+                                            position: absolute;
+                                            bottom: 5px;
+                                            right: 0;
+                                            width: 42px;
+                                            height: 42px;
+                                            padding: 8px;
+                                            border: 3px solid white;
+                                            z-index: 10;
+                                        "
+                                    >
+
+                                        ✏️
+
+                                    </label>
+
+
+                                </div>
+
+
+                                <!-- HIDDEN FILE INPUT -->
+
+                                <input
+                                    type="file"
+                                    name="profile_image"
+                                    id="profileImageInput"
+                                    accept=".jpg,.jpeg,image/jpeg"
+                                    style="display: none;"
+                                >
+
+
+                                <!-- REMOVE PHOTO BUTTON -->
+
+                                {% if profile.profile_image %}
+
+                                    <button
+                                        type="submit"
+                                        name="remove_profile_image"
+                                        value="true"
+                                        class="btn btn-sm btn-outline-danger mb-3"
+                                        onclick="
+                                            return confirm(
+                                                'Are you sure you want to remove your profile photo?'
+                                            );
+                                        "
+                                    >
+
+                                        🗑️ Remove Photo
+
+                                    </button>
+
+                                {% endif %}
+
+
+                                <p class="text-muted mb-3">
+
+                                    Click ✏️ to select a JPG profile photo
+
+                                </p>
+
+
+                                <!-- USERNAME -->
+
+                                <h4>
+
+                                    {{ request.user.username }}
+
+                                </h4>
+
+
+                                <!-- EMAIL -->
+
+                                <p class="text-muted">
+
+                                    {{ request.user.email }}
+
+                                </p>
+
+
+                                <!-- EMAIL VERIFICATION -->
+
+                                {% if profile.is_verified %}
+
+                                    <span class="badge bg-success">
+
+                                        ✓ Email Verified
+
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge bg-warning text-dark">
+
+                                        Email Not Verified
+
+                                    </span>
+
+                                {% endif %}
+
+
+                            </div>
+
+
+                            <!-- ================= RIGHT SIDE ================= -->
+
+                            <div class="col-md-8 ps-md-4">
+
+
+                                <h5 class="mb-4">
+
+                                    Account Details
+
+                                </h5>
+
+
+                                <!-- USERNAME -->
+
+                                <div class="mb-3">
+
+                                    <label class="form-label">
+
+                                        Username
+
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        value="{{ request.user.username }}"
+                                        readonly
+                                    >
+
+                                </div>
+
+
+                                <!-- EMAIL -->
+
+                                <div class="mb-3">
+
+                                    <label class="form-label">
+
+                                        Email
+
+                                    </label>
+
+                                    <input
+                                        type="email"
+                                        class="form-control"
+                                        value="{{ request.user.email }}"
+                                        readonly
+                                    >
+
+                                </div>
+
+
+                                <!-- DATE OF BIRTH -->
+
+                                <div class="mb-3">
+
+                                    <label class="form-label">
+
+                                        🎂 Date of Birth
+
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="date_of_birth"
+                                        id="dateOfBirth"
+                                        class="form-control"
+                                        placeholder="DD-MM-YYYY"
+                                        value="{{ profile.date_of_birth|date:'d-m-Y' }}"
+                                        autocomplete="off"
+                                    >
+
+                                    <small class="text-muted">
+
+                                        Type your DOB manually or select it from the calendar.
+
+                                    </small>
+
+                                </div>
+
+
+                                <!-- JOINED ON -->
+
+                                <div class="mb-3">
+
+                                    <label class="form-label">
+
+                                        Joined On
+
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        value="{{ request.user.date_joined|date:'d M Y, h:i A' }}"
+                                        readonly
+                                    >
+
+                                </div>
+
+
+                                <!-- ACCOUNT STATUS -->
+
+                                <div class="mb-4">
+
+                                    <label class="form-label">
+
+                                        Account Status
+
+                                    </label>
+
+                                    <br>
+
+                                    {% if request.user.is_active %}
+
+                                        <span class="badge bg-success">
+
+                                            Active
+
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge bg-danger">
+
+                                            Inactive
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </div>
+
+
+                                <!-- BUTTONS -->
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-primary"
+                                >
+
+                                    💾 Save Profile
+
+                                </button>
+
+
+                                <a
+                                    href="{% url 'change_password' %}"
+                                    class="btn btn-warning"
+                                >
+
+                                    🔒 Change Password
+
+                                </a>
+
+
+                                <a
+                                    href="{% url 'dashboard' %}"
+                                    class="btn btn-secondary"
+                                >
+
+                                    ← Dashboard
+
+                                </a>
+
+
+                            </div>
+
+
+                        </div>
+
+                    </form>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- FLATPICKR -->
+
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+
+<script>
+
+    flatpickr("#dateOfBirth", {
+
+        dateFormat: "d-m-Y",
+
+        allowInput: true,
+
+        maxDate: "today"
+
+    });
+
+</script>
+
+
+<!-- PROFILE PHOTO INSTANT PREVIEW -->
+
+<script>
+
+    const profileImageInput = document.getElementById(
+        "profileImageInput"
+    );
+
+
+    profileImageInput.addEventListener(
+        "change",
+        function(event) {
+
+            const file = event.target.files[0];
+
+
+            if (!file) {
+
+                return;
+
+            }
+
+
+            /* ONLY JPG / JPEG */
+
+            const allowedTypes = [
+
+                "image/jpeg"
+
+            ];
+
+
+            if (!allowedTypes.includes(file.type)) {
+
+                alert(
+                    "Only JPG or JPEG images are allowed."
+                );
+
+                profileImageInput.value = "";
+
+                return;
+
+            }
+
+
+            /* CREATE TEMPORARY PREVIEW */
+
+            const imageURL = URL.createObjectURL(
+                file
+            );
+
+
+            let profilePreview = document.getElementById(
+                "profilePreview"
+            );
+
+
+            /* IF ALREADY IMAGE */
+
+            if (profilePreview.tagName === "IMG") {
+
+                profilePreview.src = imageURL;
+
+            }
+
+
+            /* IF DEFAULT INITIAL */
+
+            else {
+
+                const newImage = document.createElement(
+                    "img"
+                );
+
+
+                newImage.id = "profilePreview";
+
+                newImage.src = imageURL;
+
+                newImage.alt = "Profile Photo";
+
+                newImage.className =
+                    "rounded-circle";
+
+
+                newImage.style.width = "150px";
+
+                newImage.style.height = "150px";
+
+                newImage.style.objectFit = "cover";
+
+                newImage.style.border =
+                    "4px solid #0d6efd";
+
+
+                profilePreview.replaceWith(
+                    newImage
+                );
+
+            }
+
+        }
+    );
+
+</script>
+
+
+{% endblock %}

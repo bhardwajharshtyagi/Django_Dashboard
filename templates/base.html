@@ -1,0 +1,1989 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {% block title %}
+            Django Dashboard
+        {% endblock %}
+    </title>
+
+
+    <!-- =========================
+         BOOTSTRAP CSS
+    ========================== -->
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+
+    <style>
+
+        /* =========================
+           BASIC
+        ========================= */
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+
+            font-family: Arial, sans-serif;
+
+            background: #eef1f6 !important;
+
+            color: #343a40 !important;
+        }
+
+
+        /* =========================
+           TOP NAVBAR
+        ========================= */
+
+        .topbar {
+
+            height: 62px;
+
+            background: #ffffff !important;
+
+            color: #343a40 !important;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 0 10px;
+
+            position: fixed;
+
+            top: 0;
+
+            left: 0;
+
+            right: 0;
+
+            z-index: 1000;
+
+            border-bottom: 1px solid #d9dde3;
+
+            box-shadow:
+                0 1px 4px
+                rgba(0, 0, 0, 0.08);
+
+        }
+
+
+        .logo {
+
+            font-size: 22px;
+
+            font-weight: bold;
+
+            color: #343a40 !important;
+
+        }
+
+
+        .top-right {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 20px;
+
+        }
+
+
+        .username {
+
+            font-size: 17px;
+
+            font-weight: 500;
+
+            color: #343a40 !important;
+
+        }
+
+
+        .logout-btn {
+
+            text-decoration: none;
+
+            background: #dc3545 !important;
+
+            color: #ffffff !important;
+
+            padding: 10px 18px;
+
+            border-radius: 6px;
+
+            font-weight: bold;
+
+            transition: 0.2s;
+
+        }
+
+
+        .logout-btn:hover {
+
+            background: #bb2d3b !important;
+
+            color: #ffffff !important;
+
+        }
+
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+
+            position: fixed;
+
+            top: 62px;
+
+            left: 0;
+
+            bottom: 0;
+
+            width: 253px;
+
+            background: #ffffff !important;
+
+            padding: 18px 8px;
+
+            overflow-y: auto;
+
+            border-right:
+                1px solid #d9dde3;
+
+            box-shadow:
+                1px 0 4px
+                rgba(0, 0, 0, 0.05);
+
+        }
+
+
+        .sidebar h2 {
+
+            color: #343a40 !important;
+
+            margin:
+                0 0 20px 5px;
+
+            font-size: 26px;
+
+        }
+
+
+        /* =========================
+           SIDEBAR BUTTONS
+        ========================= */
+
+        .sidebar a {
+
+            display: block;
+
+            text-decoration: none;
+
+            color: #ffffff !important;
+
+            background: #252b31 !important;
+
+            margin-bottom: 10px;
+
+            padding: 14px 18px;
+
+            border-radius: 7px;
+
+            font-size: 17px;
+
+            transition: 0.2s;
+
+            border:
+                1px solid #252b31;
+
+        }
+
+
+        .sidebar a:hover {
+
+            background: #000000 !important;
+
+            color: #ffffff !important;
+
+        }
+
+
+        .sidebar a.active {
+
+            font-weight: bold;
+
+            background: #000000 !important;
+
+            color: #ffffff !important;
+
+        }
+
+
+        /* =========================
+           MAIN CONTENT
+        ========================= */
+
+        .main-content {
+
+            margin-top: 62px;
+
+            min-height:
+                calc(100vh - 62px);
+
+            padding: 30px 40px;
+
+            background:
+                #eef1f6 !important;
+
+            color:
+                #343a40 !important;
+
+        }
+
+
+        /* =========================
+           LOGGED-IN USER
+           MAIN CONTENT
+        ========================= */
+
+        .authenticated-main {
+
+            margin-left: 253px;
+
+        }
+
+
+        /* =========================
+           LOGGED-OUT USER
+           MAIN CONTENT
+        ========================= */
+
+        .guest-main {
+
+            margin-left: 0;
+
+            width: 100%;
+
+        }
+
+
+        /* =========================
+           BOOTSTRAP CARD FIX
+        ========================= */
+
+        .card {
+
+            background:
+                #ffffff !important;
+
+            color:
+                #343a40 !important;
+
+            border-color:
+                #d9dde3 !important;
+
+        }
+
+
+        .card-body {
+
+            background:
+                #ffffff !important;
+
+            color:
+                #343a40 !important;
+
+        }
+
+
+        .card-header {
+
+            color:
+                #343a40 !important;
+
+        }
+
+
+        /* =========================
+           TEXT FIX
+        ========================= */
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+
+            color:
+                #343a40 !important;
+
+        }
+
+
+        p {
+
+            color:
+                #343a40;
+
+        }
+
+
+        .text-muted {
+
+            color:
+                #6c757d !important;
+
+        }
+
+
+        /* =========================
+           TABLE FIX
+        ========================= */
+
+        .table {
+
+            background:
+                #ffffff !important;
+
+            color:
+                #343a40 !important;
+
+        }
+
+
+        /* =================================================
+           CHATBOT FLOATING BUTTON
+        ================================================= */
+
+        #chatbot-button {
+
+            position: fixed;
+
+            right: 25px;
+
+            bottom: 25px;
+
+            width: 60px;
+
+            height: 60px;
+
+            border-radius: 50%;
+
+            border: none;
+
+            background: #252b31;
+
+            color: white;
+
+            font-size: 28px;
+
+            cursor: pointer;
+
+            z-index: 9999;
+
+            box-shadow:
+                0 4px 15px
+                rgba(0, 0, 0, 0.25);
+
+            transition: 0.2s;
+
+        }
+
+
+        #chatbot-button:hover {
+
+            background:
+                #000000;
+
+            transform:
+                scale(1.05);
+
+        }
+
+
+        /* =================================================
+           CHAT WINDOW
+        ================================================= */
+
+        #chatbot-window {
+
+            display: none;
+
+            position: fixed;
+
+            right: 25px;
+
+            bottom: 95px;
+
+            width: 370px;
+
+            height: 500px;
+
+            background:
+                #ffffff;
+
+            border:
+                1px solid #d9dde3;
+
+            border-radius:
+                12px;
+
+            box-shadow:
+                0 8px 30px
+                rgba(0, 0, 0, 0.20);
+
+            z-index: 9998;
+
+            overflow: hidden;
+
+            flex-direction:
+                column;
+
+        }
+
+
+        /* =================================================
+           CHAT HEADER
+        ================================================= */
+
+        .chat-header {
+
+            height: 60px;
+
+            background:
+                #252b31;
+
+            color:
+                white;
+
+            display: flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            padding:
+                0 16px;
+
+            font-weight:
+                bold;
+
+        }
+
+
+        .chat-title {
+
+            display: flex;
+
+            align-items:
+                center;
+
+            gap:
+                8px;
+
+        }
+
+
+        #chatbot-close {
+
+            background:
+                transparent;
+
+            border:
+                none;
+
+            color:
+                white;
+
+            font-size:
+                25px;
+
+            cursor:
+                pointer;
+
+        }
+
+
+        /* =================================================
+           CHAT MESSAGES
+        ================================================= */
+
+        #chat-messages {
+
+            flex: 1;
+
+            padding:
+                15px;
+
+            overflow-y:
+                auto;
+
+            background:
+                #f5f6f8;
+
+        }
+
+
+        .chat-message {
+
+            margin-bottom:
+                12px;
+
+            display:
+                flex;
+
+        }
+
+
+        .chat-message.user {
+
+            justify-content:
+                flex-end;
+
+        }
+
+
+        .chat-message.bot {
+
+            justify-content:
+                flex-start;
+
+        }
+
+
+        .message-bubble {
+
+            max-width:
+                80%;
+
+            padding:
+                10px 13px;
+
+            border-radius:
+                10px;
+
+            font-size:
+                14px;
+
+            line-height:
+                1.5;
+
+            white-space:
+                pre-wrap;
+
+            word-wrap:
+                break-word;
+
+        }
+
+
+        .chat-message.user .message-bubble {
+
+            background:
+                #252b31;
+
+            color:
+                white;
+
+            border-bottom-right-radius:
+                3px;
+
+        }
+
+
+        .chat-message.bot .message-bubble {
+
+            background:
+                white;
+
+            color:
+                #343a40;
+
+            border:
+                1px solid #d9dde3;
+
+            border-bottom-left-radius:
+                3px;
+
+        }
+
+
+        /* =================================================
+           CHAT INPUT
+        ================================================= */
+
+        .chat-input-area {
+
+            display:
+                flex;
+
+            padding:
+                10px;
+
+            background:
+                white;
+
+            border-top:
+                1px solid #d9dde3;
+
+            gap:
+                8px;
+
+        }
+
+
+        #chat-input {
+
+            flex:
+                1;
+
+            border:
+                1px solid #ced4da;
+
+            border-radius:
+                7px;
+
+            padding:
+                10px;
+
+            font-size:
+                14px;
+
+            outline:
+                none;
+
+            color:
+                #343a40;
+
+            background:
+                white;
+
+        }
+
+
+        #chat-input:focus {
+
+            border-color:
+                #252b31;
+
+        }
+
+
+        #chat-send {
+
+            width:
+                45px;
+
+            border:
+                none;
+
+            border-radius:
+                7px;
+
+            background:
+                #252b31;
+
+            color:
+                white;
+
+            cursor:
+                pointer;
+
+            font-size:
+                18px;
+
+        }
+
+
+        #chat-send:hover {
+
+            background:
+                #000000;
+
+        }
+
+
+        #chat-send:disabled {
+
+            opacity:
+                0.6;
+
+            cursor:
+                not-allowed;
+
+        }
+
+
+        /* =================================================
+           TYPING
+        ================================================= */
+
+        .typing {
+
+            font-size:
+                13px;
+
+            color:
+                #6c757d;
+
+            padding:
+                5px 0;
+
+        }
+
+
+        /* =================================================
+           MOBILE
+        ================================================= */
+
+        @media (max-width: 600px) {
+
+
+            .topbar {
+
+                padding:
+                    0 8px;
+
+            }
+
+
+            .logo {
+
+                font-size:
+                    18px;
+
+            }
+
+
+            .username {
+
+                font-size:
+                    14px;
+
+            }
+
+
+            .top-right {
+
+                gap:
+                    10px;
+
+            }
+
+
+            .logout-btn {
+
+                padding:
+                    8px 12px;
+
+            }
+
+
+            .sidebar {
+
+                width:
+                    200px;
+
+            }
+
+
+            .authenticated-main {
+
+                margin-left:
+                    200px;
+
+                padding:
+                    20px;
+
+            }
+
+
+            .guest-main {
+
+                margin-left:
+                    0;
+
+                padding:
+                    20px;
+
+            }
+
+
+            #chatbot-window {
+
+                right:
+                    10px;
+
+                bottom:
+                    85px;
+
+                width:
+                    calc(100% - 20px);
+
+                height:
+                    500px;
+
+            }
+
+
+            #chatbot-button {
+
+                right:
+                    15px;
+
+                bottom:
+                    15px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =================================================
+         TOP NAVBAR
+    ================================================= -->
+
+    <div class="topbar">
+
+
+        <div class="logo">
+
+            Admin Dashboard
+
+        </div>
+
+
+        <!-- =============================================
+             SHOW USER DETAILS ONLY AFTER LOGIN
+        ============================================== -->
+
+        {% if request.user.is_authenticated %}
+
+
+            <div class="top-right">
+
+
+                <div class="username">
+
+                    👋 {{ request.user.username }}
+
+                </div>
+
+
+                <a
+                    href="{% url 'logout' %}"
+                    class="logout-btn"
+                >
+
+                    Logout
+
+                </a>
+
+
+            </div>
+
+
+        {% endif %}
+
+
+    </div>
+
+
+
+    <!-- =================================================
+         SIDEBAR
+         ONLY FOR LOGGED-IN USER
+    ================================================= -->
+
+    {% if request.user.is_authenticated %}
+
+
+        <div class="sidebar">
+
+
+            <h2>
+
+                Dashboard
+
+            </h2>
+
+
+            <!-- DASHBOARD -->
+
+            <a
+                href="{% url 'dashboard' %}"
+                class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}"
+            >
+
+                🏠 Dashboard
+
+            </a>
+
+
+            <!-- PROFILE -->
+
+            <a
+                href="{% url 'profile' %}"
+                class="{% if request.resolver_match.url_name == 'profile' %}active{% endif %}"
+            >
+
+                👤 Profile
+
+            </a>
+
+
+            <!-- UPLOAD FILES -->
+
+            <a
+                href="{% url 'upload_file' %}"
+                class="{% if request.resolver_match.url_name == 'upload_file' %}active{% endif %}"
+            >
+
+                📂 Upload Files
+
+            </a>
+
+
+            <!-- ANALYTICS -->
+
+            <a
+                href="{% url 'analytics' %}"
+                class="{% if request.resolver_match.url_name == 'analytics' %}active{% endif %}"
+            >
+
+                📊 Analytics
+
+            </a>
+            <!-- PDF GENERATOR -->
+
+                <a
+                    href="{% url 'pdf_generator' %}"
+                    class="{% if request.resolver_match.url_name == 'pdf_generator' %}active{% endif %}"
+                >
+
+                    📄 PDF Generator
+
+                </a>
+
+
+            <!-- SUPPORT -->
+
+            <a
+                href="{% url 'support' %}"
+                class="{% if request.resolver_match.url_name == 'support' %}active{% endif %}"
+            >
+
+                🎧 Support
+
+            </a>
+
+
+        </div>
+
+
+    {% endif %}
+
+
+
+    <!-- =================================================
+         PAGE CONTENT
+    ================================================= -->
+
+    <main
+        class="
+            main-content
+
+            {% if request.user.is_authenticated %}
+
+                authenticated-main
+
+            {% else %}
+
+                guest-main
+
+            {% endif %}
+        "
+    >
+
+
+        {% if messages %}
+
+
+            {% for message in messages %}
+
+
+                <div
+                    class="alert alert-{{ message.tags }} alert-dismissible fade show"
+                    role="alert"
+                >
+
+                    {{ message }}
+
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                    ></button>
+
+
+                </div>
+
+
+            {% endfor %}
+
+
+        {% endif %}
+
+
+
+        {% block content %}
+
+        {% endblock %}
+
+
+    </main>
+
+
+
+    <!-- =================================================
+         CHATBOT
+         ONLY FOR LOGGED-IN USER
+    ================================================= -->
+
+    {% if request.user.is_authenticated %}
+
+
+        <!-- CHATBOT BUTTON -->
+
+        <button
+            id="chatbot-button"
+            title="Open AI Assistant"
+        >
+
+            🤖
+
+        </button>
+
+
+
+        <!-- CHATBOT WINDOW -->
+
+        <div id="chatbot-window">
+
+
+            <!-- HEADER -->
+
+            <div class="chat-header">
+
+
+                <div class="chat-title">
+
+                    🤖
+
+                    <span>
+
+                        AI Assistant
+
+                    </span>
+
+                </div>
+
+
+                <button
+                    id="chatbot-close"
+                    title="Close"
+                >
+
+                    ×
+
+                </button>
+
+
+            </div>
+
+
+
+            <!-- MESSAGES -->
+
+            <div id="chat-messages">
+
+
+                <div class="chat-message bot">
+
+
+                    <div class="message-bubble">
+
+                        Hello! 👋
+                        How can I help you today?
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- INPUT -->
+
+            <div class="chat-input-area">
+
+
+                <input
+                    type="text"
+                    id="chat-input"
+                    placeholder="Ask something..."
+                    autocomplete="off"
+                >
+
+
+                <button
+                    id="chat-send"
+                    type="button"
+                >
+
+                    ➤
+
+                </button>
+
+
+            </div>
+
+
+        </div>
+
+
+    {% endif %}
+
+
+
+    <!-- =================================================
+         BOOTSTRAP JS
+    ================================================= -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    ></script>
+
+
+
+    <!-- =================================================
+         CHATBOT JAVASCRIPT
+         ONLY FOR LOGGED-IN USER
+    ================================================= -->
+
+    {% if request.user.is_authenticated %}
+
+
+    <script>
+
+
+        /* =========================================
+           FASTAPI CHAT API
+        ========================================= */
+
+        const CHAT_API_URL =
+            "http://127.0.0.1:8000/chat/";
+
+
+
+        /* =========================================
+           DJANGO USER CONTEXT API
+        ========================================= */
+
+        const USER_CONTEXT_URL =
+            "/uploads/chatbot-user-context/";
+
+
+
+        /* =========================================
+           CURRENT LOGGED-IN USER ID
+        ========================================= */
+
+        const CURRENT_USER_ID =
+            "{{ request.user.id }}";
+
+
+
+        /* =========================================
+           GET ELEMENTS
+        ========================================= */
+
+        const chatbotButton =
+            document.getElementById(
+                "chatbot-button"
+            );
+
+
+        const chatbotWindow =
+            document.getElementById(
+                "chatbot-window"
+            );
+
+
+        const chatbotClose =
+            document.getElementById(
+                "chatbot-close"
+            );
+
+
+        const chatInput =
+            document.getElementById(
+                "chat-input"
+            );
+
+
+        const chatSend =
+            document.getElementById(
+                "chat-send"
+            );
+
+
+        const chatMessages =
+            document.getElementById(
+                "chat-messages"
+            );
+
+
+
+        /* =========================================
+           USER-SPECIFIC SESSION STORAGE KEY
+
+           IMPORTANT:
+           Har user ka alag chat session hoga.
+        ========================================= */
+
+        const CHAT_SESSION_KEY =
+            "chat_session_id_user_" +
+            CURRENT_USER_ID;
+
+
+
+        /* =========================================
+           GET SESSION ID
+        ========================================= */
+
+        let chatSessionId =
+            localStorage.getItem(
+                CHAT_SESSION_KEY
+            );
+
+
+
+        /* =========================================
+           CREATE SESSION IF NOT EXISTS
+        ========================================= */
+
+        if (!chatSessionId) {
+
+
+            chatSessionId =
+
+                "django_user_" +
+
+                CURRENT_USER_ID +
+
+                "_" +
+
+                Date.now() +
+
+                "_" +
+
+                Math.random()
+                    .toString(36)
+                    .substring(2, 10);
+
+
+
+            localStorage.setItem(
+
+                CHAT_SESSION_KEY,
+
+                chatSessionId
+
+            );
+
+
+        }
+
+
+
+        /* =========================================
+           OPEN CHAT
+        ========================================= */
+
+        chatbotButton.addEventListener(
+
+            "click",
+
+            function () {
+
+
+                chatbotWindow.style.display =
+                    "flex";
+
+
+                chatInput.focus();
+
+
+                loadChatHistory();
+
+
+            }
+
+        );
+
+
+
+        /* =========================================
+           CLOSE CHAT
+        ========================================= */
+
+        chatbotClose.addEventListener(
+
+            "click",
+
+            function () {
+
+
+                chatbotWindow.style.display =
+                    "none";
+
+
+            }
+
+        );
+
+
+
+        /* =========================================
+           ADD MESSAGE TO UI
+        ========================================= */
+
+        function addMessage(
+
+            message,
+
+            type
+
+        ) {
+
+
+            const wrapper =
+                document.createElement(
+                    "div"
+                );
+
+
+
+            wrapper.className =
+                "chat-message " +
+                type;
+
+
+
+            const bubble =
+                document.createElement(
+                    "div"
+                );
+
+
+
+            bubble.className =
+                "message-bubble";
+
+
+
+            bubble.textContent =
+                message;
+
+
+
+            wrapper.appendChild(
+                bubble
+            );
+
+
+
+            chatMessages.appendChild(
+                wrapper
+            );
+
+
+
+            chatMessages.scrollTop =
+                chatMessages.scrollHeight;
+
+
+        }
+
+
+
+        /* =========================================
+           GET CURRENT USER CONTEXT
+        ========================================= */
+
+        async function getUserContext() {
+
+
+            try {
+
+
+                const response =
+
+                    await fetch(
+
+                        USER_CONTEXT_URL,
+
+                        {
+
+                            credentials:
+                                "same-origin"
+
+                        }
+
+                    );
+
+
+
+                if (!response.ok) {
+
+
+                    throw new Error(
+
+                        "Unable to fetch user context"
+
+                    );
+
+
+                }
+
+
+
+                const data =
+                    await response.json();
+
+
+
+                return data;
+
+
+            }
+
+
+            catch (error) {
+
+
+                console.error(
+
+                    "User context error:",
+
+                    error
+
+                );
+
+
+
+                return null;
+
+
+            }
+
+
+        }
+
+
+
+        /* =========================================
+           LOAD CHAT HISTORY
+        ========================================= */
+
+        async function loadChatHistory() {
+
+
+            try {
+
+
+                const response =
+
+                    await fetch(
+
+                        CHAT_API_URL +
+
+                        "history/" +
+
+                        encodeURIComponent(
+
+                            chatSessionId
+
+                        )
+
+                    );
+
+
+
+                if (!response.ok) {
+
+
+                    return;
+
+
+                }
+
+
+
+                const data =
+                    await response.json();
+
+
+
+                if (
+
+
+                    data.success &&
+
+                    data.messages &&
+
+                    data.messages.length > 0
+
+
+                ) {
+
+
+                    chatMessages.innerHTML =
+                        "";
+
+
+
+                    data.messages.forEach(
+
+                        function (item) {
+
+
+                            const type =
+
+                                item.role === "user"
+
+                                    ? "user"
+
+                                    : "bot";
+
+
+
+                            addMessage(
+
+                                item.message,
+
+                                type
+
+                            );
+
+
+                        }
+
+                    );
+
+
+                }
+
+
+            }
+
+
+            catch (error) {
+
+
+                console.error(
+
+                    "History error:",
+
+                    error
+
+                );
+
+
+            }
+
+
+        }
+
+
+
+        /* =========================================
+           SEND MESSAGE
+        ========================================= */
+
+        async function sendMessage() {
+
+
+            const message =
+                chatInput.value.trim();
+
+
+
+            if (!message) {
+
+
+                return;
+
+
+            }
+
+
+
+            /* Show user message */
+
+            addMessage(
+
+                message,
+
+                "user"
+
+            );
+
+
+
+            chatInput.value =
+                "";
+
+
+
+            chatSend.disabled =
+                true;
+
+
+
+            /* =====================================
+               TYPING INDICATOR
+            ===================================== */
+
+            const typing =
+                document.createElement(
+                    "div"
+                );
+
+
+
+            typing.className =
+                "typing";
+
+
+
+            typing.id =
+                "typing-indicator";
+
+
+
+            typing.textContent =
+                "AI is typing...";
+
+
+
+            chatMessages.appendChild(
+                typing
+            );
+
+
+
+            chatMessages.scrollTop =
+                chatMessages.scrollHeight;
+
+
+
+            try {
+
+
+                /* =================================
+                   GET CURRENT DJANGO USER DATA
+                ================================= */
+
+                const userContext =
+                    await getUserContext();
+
+
+
+                /* =================================
+                   SEND MESSAGE + USER DATA
+                   TO FASTAPI
+                ================================= */
+
+                const response =
+
+                    await fetch(
+
+                        CHAT_API_URL,
+
+                        {
+
+
+                            method:
+                                "POST",
+
+
+
+                            headers: {
+
+
+                                "Content-Type":
+                                    "application/json"
+
+
+                            },
+
+
+
+                            body:
+
+                                JSON.stringify(
+
+
+                                    {
+
+
+                                        session_id:
+                                            chatSessionId,
+
+
+                                        message:
+                                            message,
+
+
+                                        user_context:
+                                            userContext
+
+
+                                    }
+
+
+                                )
+
+
+                        }
+
+                    );
+
+
+
+                const data =
+                    await response.json();
+
+
+
+                /* =================================
+                   REMOVE TYPING INDICATOR
+                ================================= */
+
+                const typingElement =
+
+                    document.getElementById(
+
+                        "typing-indicator"
+
+                    );
+
+
+
+                if (typingElement) {
+
+
+                    typingElement.remove();
+
+
+                }
+
+
+
+                /* =================================
+                   SHOW AI RESPONSE
+                ================================= */
+
+                if (data.success) {
+
+
+                    addMessage(
+
+                        data.reply,
+
+                        "bot"
+
+                    );
+
+
+                }
+
+                else {
+
+
+                    addMessage(
+
+                        "Sorry, something went wrong: " +
+
+                        data.reply,
+
+                        "bot"
+
+                    );
+
+
+                }
+
+
+            }
+
+
+            catch (error) {
+
+
+                const typingElement =
+
+                    document.getElementById(
+
+                        "typing-indicator"
+
+                    );
+
+
+
+                if (typingElement) {
+
+
+                    typingElement.remove();
+
+
+                }
+
+
+
+                addMessage(
+
+                    "Unable to connect to AI server.",
+
+                    "bot"
+
+                );
+
+
+
+                console.error(
+
+                    "Chat error:",
+
+                    error
+
+                );
+
+
+            }
+
+
+
+            chatSend.disabled =
+                false;
+
+
+
+            chatInput.focus();
+
+
+        }
+
+
+
+        /* =========================================
+           SEND BUTTON
+        ========================================= */
+
+        chatSend.addEventListener(
+
+            "click",
+
+            sendMessage
+
+        );
+
+
+
+        /* =========================================
+           ENTER KEY
+        ========================================= */
+
+        chatInput.addEventListener(
+
+            "keydown",
+
+            function (event) {
+
+
+                if (
+
+
+                    event.key === "Enter" &&
+
+                    !event.shiftKey
+
+
+                ) {
+
+
+                    event.preventDefault();
+
+
+                    sendMessage();
+
+
+                }
+
+
+            }
+
+        );
+
+
+    </script>
+
+
+    {% endif %}
+
+
+</body>
+
+</html>

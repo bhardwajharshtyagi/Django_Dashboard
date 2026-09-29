@@ -1,0 +1,280 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+
+Support
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container mt-4">
+
+
+    <!-- PAGE HEADER -->
+
+    <div class="mb-4">
+
+        <h2>
+            🎧 Support
+        </h2>
+
+        <p class="text-muted">
+
+            Need help? Submit your issue below.
+
+        </p>
+
+    </div>
+
+
+    <!-- SUPPORT FORM -->
+
+    <div class="card shadow mb-4">
+
+        <div class="card-header bg-primary text-white">
+
+            <h5 class="mb-0">
+
+                Submit a Support Request
+
+            </h5>
+
+        </div>
+
+
+        <div class="card-body">
+
+
+            <form
+                method="POST"
+            >
+
+                {% csrf_token %}
+
+
+                <!-- SUBJECT -->
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+
+                        Subject
+
+                    </label>
+
+                    {{ form.subject }}
+
+                    {% if form.subject.errors %}
+
+                        <div class="text-danger mt-1">
+
+                            {{ form.subject.errors }}
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- MESSAGE -->
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+
+                        Message
+
+                    </label>
+
+                    {{ form.message }}
+
+                    {% if form.message.errors %}
+
+                        <div class="text-danger mt-1">
+
+                            {{ form.message.errors }}
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- SUBMIT -->
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+
+                    📩 Submit Request
+
+                </button>
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- MY REQUESTS -->
+
+    <div class="card shadow">
+
+        <div class="card-header">
+
+            <h5 class="mb-0">
+
+                📋 My Support Requests
+
+            </h5>
+
+        </div>
+
+
+        <div class="card-body">
+
+
+            <div class="table-responsive">
+
+                <table
+                    class="table table-bordered table-hover align-middle"
+                >
+
+                    <thead class="table-dark">
+
+                        <tr>
+
+                            <th>
+                                #
+                            </th>
+
+                            <th>
+                                Subject
+                            </th>
+
+                            <th>
+                                Message
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Created At
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+
+                        {% for ticket in tickets %}
+
+                        <tr>
+
+                            <td>
+
+                                {{ forloop.counter }}
+
+                            </td>
+
+
+                            <td>
+
+                                {{ ticket.subject }}
+
+                            </td>
+
+
+                            <td>
+
+                                {{ ticket.message }}
+
+                            </td>
+
+
+                            <td>
+
+                                {% if ticket.status == "open" %}
+
+                                    <span class="badge bg-danger">
+
+                                        Open
+
+                                    </span>
+
+                                {% elif ticket.status == "in_progress" %}
+
+                                    <span class="badge bg-warning text-dark">
+
+                                        In Progress
+
+                                    </span>
+
+                                {% elif ticket.status == "resolved" %}
+
+                                    <span class="badge bg-success">
+
+                                        Resolved
+
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td>
+
+                                {{ ticket.created_at }}
+
+                            </td>
+
+                        </tr>
+
+
+                        {% empty %}
+
+                        <tr>
+
+                            <td
+                                colspan="5"
+                                class="text-center text-muted"
+                            >
+
+                                No support requests yet.
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}
+Preview File
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h3>
+                👁 Preview
+            </h3>
+
+            <p class="text-muted mb-0">
+                {{ file.original_name }}
+            </p>
+
+        </div>
+
+        <div>
+
+            <a
+                href="{% url 'download_file' file.id %}"
+                class="btn btn-success"
+            >
+                📥 Download
+            </a>
+
+            <a
+                href="{% url 'upload_file' %}"
+                class="btn btn-secondary"
+            >
+                ← Back
+            </a>
+
+        </div>
+
+    </div>
+
+    <div class="card shadow">
+
+        <div class="card-body p-0">
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered table-hover mb-0">
+
+                    <tbody>
+
+                        {% for row in rows %}
+
+                        <tr>
+
+                            {% for cell in row %}
+
+                            <td>
+                                {{ cell }}
+                            </td>
+
+                            {% endfor %}
+
+                        </tr>
+
+                        {% empty %}
+
+                        <tr>
+
+                            <td class="text-center">
+                                No data available in this file.
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

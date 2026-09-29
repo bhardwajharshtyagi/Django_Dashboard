@@ -1,0 +1,393 @@
+{% extends "base.html" %}
+
+{% block title %}
+Analytics
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <!-- =========================
+         PAGE TITLE
+    ========================== -->
+
+    <div class="mb-4">
+
+        <h2>
+            📊 File Analytics
+        </h2>
+
+        <p class="text-muted">
+            Live visualization of your uploaded files and storage usage.
+        </p>
+
+    </div>
+
+
+
+    <!-- =========================
+         SUMMARY CARDS
+    ========================== -->
+
+    <div class="row mb-4">
+
+
+        <!-- TOTAL FILES -->
+
+        <div class="col-md-4 mb-3">
+
+            <div class="card shadow h-100">
+
+                <div class="card-body text-center">
+
+                    <h5 class="text-muted">
+                        Total Files
+                    </h5>
+
+                    <h2>
+                        {{ total_files }}
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- STORAGE USED -->
+
+        <div class="col-md-4 mb-3">
+
+            <div class="card shadow h-100">
+
+                <div class="card-body text-center">
+
+                    <h5 class="text-muted">
+                        Storage Used
+                    </h5>
+
+                    <h2>
+                        {{ storage_mb }} MB
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- EXCEL FILES -->
+
+        <div class="col-md-4 mb-3">
+
+            <div class="card shadow h-100">
+
+                <div class="card-body text-center">
+
+                    <h5 class="text-muted">
+                        Excel Files
+                    </h5>
+
+                    <h2>
+                        {{ total_excel }}
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =========================
+         FIRST ROW
+    ========================== -->
+
+    <div class="row">
+
+
+        <!-- FILES BY TYPE BAR CHART -->
+
+        <div class="col-lg-6 mb-4">
+
+            <div class="card shadow h-100">
+
+                <div class="card-header">
+
+                    <h5 class="mb-0">
+                        📊 Files by Type
+                    </h5>
+
+                </div>
+
+
+                <div class="card-body text-center">
+
+                    {% if bar_chart %}
+
+                        <img
+                            src="data:image/png;base64,{{ bar_chart }}"
+                            class="img-fluid"
+                            alt="Files by Type Chart"
+                        >
+
+                    {% else %}
+
+                        <div
+                            class="d-flex align-items-center justify-content-center"
+                            style="height: 250px;"
+                        >
+
+                            <p class="text-muted">
+                                No data available.
+                            </p>
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- FILE DISTRIBUTION PIE CHART -->
+
+        <div class="col-lg-6 mb-4">
+
+            <div class="card shadow h-100">
+
+                <div class="card-header">
+
+                    <h5 class="mb-0">
+                        🥧 File Distribution
+                    </h5>
+
+                </div>
+
+
+                <div class="card-body text-center">
+
+                    {% if pie_chart %}
+
+                        <img
+                            src="data:image/png;base64,{{ pie_chart }}"
+                            class="img-fluid"
+                            alt="File Distribution Chart"
+                        >
+
+                    {% else %}
+
+                        <div
+                            class="d-flex align-items-center justify-content-center"
+                            style="height: 250px;"
+                        >
+
+                            <p class="text-muted">
+                                No data available.
+                            </p>
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =========================
+         SECOND ROW
+    ========================== -->
+
+    <div class="row">
+
+
+        <!-- STORAGE DONUT CHART -->
+
+        <div class="col-lg-6 mb-4">
+
+            <div class="card shadow h-100">
+
+                <div class="card-header">
+
+                    <h5 class="mb-0">
+                        💾 Storage Usage
+                    </h5>
+
+                </div>
+
+
+                <div class="card-body text-center">
+
+                    {% if storage_chart %}
+
+                        <img
+                            src="data:image/png;base64,{{ storage_chart }}"
+                            class="img-fluid"
+                            alt="Storage Usage Chart"
+                        >
+
+                    {% else %}
+
+                        <div
+                            class="d-flex align-items-center justify-content-center"
+                            style="height: 250px;"
+                        >
+
+                            <p class="text-muted">
+                                No storage data available.
+                            </p>
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- FILE DETAILS -->
+
+        <div class="col-lg-6 mb-4">
+
+            <div class="card shadow h-100">
+
+                <div class="card-header">
+
+                    <h5 class="mb-0">
+                        📁 File Details
+                    </h5>
+
+                </div>
+
+
+                <div class="card-body">
+
+
+                    <div class="row text-center">
+
+
+                        <!-- IMAGES -->
+
+                        <div class="col-6 mb-4">
+
+                            <h6>
+                                🖼 Images
+                            </h6>
+
+                            <h3>
+                                {{ total_images }}
+                            </h3>
+
+                        </div>
+
+
+
+                        <!-- PDF -->
+
+                        <div class="col-6 mb-4">
+
+                            <h6>
+                                📄 PDFs
+                            </h6>
+
+                            <h3>
+                                {{ total_pdfs }}
+                            </h3>
+
+                        </div>
+
+
+
+                        <!-- EXCEL -->
+
+                        <div class="col-6">
+
+                            <h6>
+                                📊 Excel
+                            </h6>
+
+                            <h3>
+                                {{ total_excel }}
+                            </h3>
+
+                        </div>
+
+
+
+                        <!-- CSV -->
+
+                        <div class="col-6">
+
+                            <h6>
+                                📑 CSV
+                            </h6>
+
+                            <h3>
+                                {{ total_csv }}
+                            </h3>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <hr>
+
+
+
+                    <!-- OTHER FILES -->
+
+                    <div class="text-center">
+
+                        <h6>
+                            📎 Other Files
+                        </h6>
+
+                        <h3>
+                            {{ total_other }}
+                        </h3>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+{% endblock %}

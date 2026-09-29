@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<div class="text-center mt-5">
+
+    <h1 class="display-4 fw-bold">
+
+        Django Dashboard
+
+    </h1>
+
+    <p class="lead">
+
+        Authentication + Dashboard + Profile + Upload System
+
+    </p>
+
+    <a href="{% url 'login' %}" class="btn btn-success btn-lg me-2">
+
+        Login
+
+    </a>
+
+    <a href="{% url 'signup' %}" class="btn btn-primary btn-lg">
+
+        Signup
+
+    </a>
+
+</div>
+
+{% endblock %}

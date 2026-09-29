@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <!-- Welcome Section -->
+
+    <div class="mb-4">
+
+        <h2>
+            Welcome {{ request.user.username }}
+        </h2>
+
+        <p class="text-muted mb-0">
+            Here is an overview of your uploaded files.
+        </p>
+
+    </div>
+
+
+    <!-- First Row -->
+
+    <div class="row g-3 mb-3">
+
+
+        <!-- Total Files -->
+
+        <div class="col-md-4">
+
+            <div class="card shadow h-100">
+
+                <div class="card-body">
+
+                    <h5 class="card-title text-muted">
+
+                        Total Files
+
+                    </h5>
+
+                    <h2 class="mb-0">
+
+                        {{ total_files }}
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Images -->
+
+        <div class="col-md-4">
+
+            <div class="card shadow h-100">
+
+                <div class="card-body">
+
+                    <h5 class="card-title text-muted">
+
+                        Images
+
+                    </h5>
+
+                    <h2 class="mb-0">
+
+                        {{ total_images }}
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Storage -->
+
+        <div class="col-md-4">
+
+            <div class="card shadow h-100">
+
+                <div class="card-body">
+
+                    <h5 class="card-title text-muted">
+
+                        Storage Used
+
+                    </h5>
+
+                    <h2 class="mb-0">
+
+                        {{ storage_mb }} MB
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Second Row -->
+
+    <div class="row g-3">
+
+
+        <!-- PDF Files -->
+
+        <div class="col-md-4">
+
+            <div class="card shadow h-100">
+
+                <div class="card-body">
+
+                    <h5 class="card-title text-muted">
+
+                        PDF Files
+
+                    </h5>
+
+                    <h2 class="mb-0">
+
+                        {{ total_pdfs }}
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Excel Files -->
+
+        <div class="col-md-4">
+
+            <div class="card shadow h-100">
+
+                <div class="card-body">
+
+                    <h5 class="card-title text-muted">
+
+                        Excel Files
+
+                    </h5>
+
+                    <h2 class="mb-0">
+
+                        {{ total_excel }}
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- CSV Files -->
+
+        <div class="col-md-4">
+
+            <div class="card shadow h-100">
+
+                <div class="card-body">
+
+                    <h5 class="card-title text-muted">
+
+                        CSV Files
+
+                    </h5>
+
+                    <h2 class="mb-0">
+
+                        {{ total_csv }}
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
